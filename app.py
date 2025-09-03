@@ -100,6 +100,7 @@ if generate_button:
     st.session_state.call_initiated = False
     st.session_state.candidate_phone_number = candidate_phone_number_input
     
+        # Determine the spinner message based on whether a resume was uploaded
     if uploaded_resume:
         spinner_message = "Analyzing resume and generating interview script..."
     else:
@@ -108,8 +109,7 @@ if generate_button:
     with st.spinner(spinner_message):
         resume_text = extract_text_from_file(uploaded_resume)
         if uploaded_resume and not resume_text:
-        resume_text = extract_text_from_file(uploaded_resume)
-        if uploaded_resume and not resume_text:
+            # An error occurred during file reading, so we stop.
             st.stop()
             
         system_prompt = generate_system_prompt_with_gemini(GEMINI_API_KEY, job_title, job_description, candidate_name, resume_text)
@@ -227,3 +227,4 @@ if st.session_state.call_result:
         else:
 
             st.write("Transcript not available.")
+
