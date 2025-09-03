@@ -1,0 +1,5 @@
+streamlit
+google-generativeai
+vapi_server_sdk
+requests
+PyPDF2
