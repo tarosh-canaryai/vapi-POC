@@ -39,7 +39,7 @@ def extract_text_from_file(uploaded_file):
 def generate_system_prompt_with_gemini(api_key, job_title, job_description, candidate_name, resume_text):
     try:
         genai.configure(api_key=api_key)
-        model = genai.GenerativeModel('gemini-1.5-flash')
+        model = genai.GenerativeModel('gemini-2.5-flash')
         
         prompt = f"""
         You are an expert hiring manager and technical recruiter responsible for creating world-class, automated phone screen scripts for an AI interviewer named Alex.
@@ -100,7 +100,14 @@ if generate_button:
     st.session_state.call_initiated = False
     st.session_state.candidate_phone_number = candidate_phone_number_input
     
-    with st.spinner("Analyzing resume and generating interview script..."):
+    if uploaded_resume:
+        spinner_message = "Analyzing resume and generating interview script..."
+    else:
+        spinner_message = "Generating interview script..."
+
+    with st.spinner(spinner_message):
+        resume_text = extract_text_from_file(uploaded_resume)
+        if uploaded_resume and not resume_text:
         resume_text = extract_text_from_file(uploaded_resume)
         if uploaded_resume and not resume_text:
             st.stop()
@@ -218,4 +225,5 @@ if st.session_state.call_result:
                     candidate_name_from_state = st.session_state.get('candidate_name', 'User')
                     st.markdown(f"**👤 {candidate_name_from_state} (User):** {dialogue}")
         else:
+
             st.write("Transcript not available.")
